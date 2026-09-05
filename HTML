@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chill Student Life Planner & Knowledge Log</title>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --text-color: #f8fafc;
+      --accent-color: #38bdf8;
+      --accent-hover: #0284c7;
+      --subtext: #94a3b8;
+      --border-color: #334155;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    h1, h2, h3 {
+      margin: 0 0 10px 0;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 科學筆記庫專用樣式 */
+    .subject-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .tag-btn {
+      background-color: #334155;
+      color: var(--text-color);
+      border: none;
+      padding: 6px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .tag-btn.active, .tag-btn:hover {
+      background-color: var(--accent-color);
+      color: #0f172a;
+      font-weight: bold;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    select, textarea, input {
+      background-color: #0f172a;
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+
+    button.primary-btn {
+      background-color: var(--accent-color);
+      color: #0f172a;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button.primary-btn:hover {
+      background-color: var(--accent-hover);
+    }
+
+    .log-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 15px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .log-item {
+      background-color: #0f172a;
+      border-left: 4px solid var(--accent-color);
+      padding: 12px;
+      border-radius: 0 8px 8px 0;
+      position: relative;
+    }
+
+    .log-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--subtext);
+      margin-bottom: 6px;
+    }
+
+    .log-subject {
+      background-color: var(--accent-color);
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .delete-btn {
+      background: none;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    /* 閃卡複習區 */
+    .flashcard {
+      background: linear-gradient(135deg, #1e293b, #334155);
+      border: 1px solid var(--accent-color);
+      text-align: center;
+      padding: 25px;
+    }
+
+    .flashcard-text {
+      font-size: 1.1rem;
+      margin: 15px 0;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- 標題 -->
+    <div style="text-align: center;">
+      <h1>🧠 Chill Student Life & 全科知識庫</h1>
+      <p style="color: var(--subtext);">溫書 + 健身 + 每日新知識累積</p>
+    </div>
+
+    <!-- 每日隨機知識複習閃卡 (Active Recall) -->
+    <div class="card flashcard">
+      <div style="font-size: 0.85rem; color: var(--accent-color); font-weight: bold; letter-spacing: 1px;">
+        💡 每日靈光一閃 (ACTIVE RECALL)
+      </div>
+      <div id="flashcard-content" class="flashcard-text">
+        按下方的「隨機抽查」，測試自己還記不記得學過的知識！
+      </div>
+      <button class="primary-btn" onclick="drawRandomConcept()">🎲 隨機抽查一條新知識</button>
+    </div>
+
+    <!-- 新增知識 Log -->
+    <div class="card">
+      <h2>📝 記錄今日新學到的知識 / 陷阱</h2>
+      <div class="input-group">
+        <label for="subject-select" style="font-size: 0.9rem; color: var(--subtext);">選擇科目：</label>
+        <select id="subject-select">
+          <option value="Physics">⚡ Physical 物理</option>
+          <option value="Chemistry">🧪 Chemistry 化學</option>
+          <option value="數學">📐 數學 (Core)</option>
+          <option value="M2">積分 M2</option>
+          <option value="中文">📖 中文</option>
+          <option value="英文">🔤 英文</option>
+          <option value="Geography">🌍 Geography 地理</option>
+        </select>
+
+        <textarea id="concept-input" placeholder="例如：Physics - Heat loss 導致計算出的 c (比熱容量) 偏高，因為升溫 delta T 比預期小。"></textarea>
+        
+        <button class="primary-btn" onclick="saveKnowledge()">💾 記錄入記憶庫</button>
+      </div>
+    </div>
+
+    <!-- 知識庫清單與篩選 -->
+    <div class="card">
+      <h2>📚 我的全科知識庫</h2>
+      
+      <!-- 科目篩選按鈕 -->
+      <div class="subject-tags">
+        <button class="tag-btn active" onclick="filterSubject('All')">全部 (All)</button>
+        <button class="tag-btn" onclick="filterSubject('Physics')">Physics</button>
+        <button class="tag-btn" onclick="filterSubject('Chemistry')">Chemistry</button>
+        <button class="tag-btn" onclick="filterSubject('數學')">數學</button>
+        <button class="tag-btn" onclick="filterSubject('M2')">M2</button>
+        <button class="tag-btn" onclick="filterSubject('中文')">中文</button>
+        <button class="tag-btn" onclick="filterSubject('英文')">英文</button>
+        <button class="tag-btn" onclick="filterSubject('Geography')">Geography</button>
+      </div>
+
+      <div id="log-container" class="log-list">
+        <!-- 筆記會動態塞在這裡 -->
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // 初始化筆記資料庫（如果有舊紀錄就載入，沒有就用預設的熱學筆記）
+    let knowledgeBase = JSON.parse(localStorage.getItem('chillStudentNotes')) || [
+      {
+        id: 1,
+        subject: 'Physics',
+        content: 'Heat loss 導致算出來的 c (比熱容量) 偏高：因為部分熱熱散失，實際升溫 ΔT 偏小，由 c = Q / (m*ΔT) 可知分母變小，c 被高估。',
+        date: '2026-09-05'
+      },
+      {
+        id: 2,
+        subject: 'Physics',
+        content: 'T-t 圖形斜率 (Slope = P/mc)：斜率越陡代表升溫越快，比熱容量 c 越細。水平線 (Slope=0) 代表正在相變 (Phase Change)。',
+        date: '2026-09-05'
+      }
+    ];
+
+    let currentFilter = 'All';
+
+    // 儲存新知識
+    function saveKnowledge() {
+      const subject = document.getElementById('subject-select').value;
+      const content = document.getElementById('concept-input').value.trim();
+
+      if (!content) {
+        alert('請輸入你學到的新知識內容！');
+        return;
+      }
+
+      const newLog = {
+        id: Date.now(),
+        subject: subject,
+        content: content,
+        date: new Date().toISOString().split('T')[0]
+      };
+
+      knowledgeBase.unshift(newLog); // 加到最前面
+      localStorage.setItem('chillStudentNotes', JSON.stringify(knowledgeBase));
+      
+      document.getElementById('concept-input').value = '';
+      renderLogs();
+      alert('已成功存入全科知識庫！💪');
+    }
+
+    // 渲染筆記列表
+    function renderLogs() {
+      const container = document.getElementById('log-container');
+      container.innerHTML = '';
+
+      const filteredLogs = currentFilter === 'All' 
+        ? knowledgeBase 
+        : knowledgeBase.filter(item => item.subject === currentFilter);
+
+      if (filteredLogs.length === 0) {
+        container.innerHTML = `<div style="text-align:center; color: var(--subtext); padding: 20px;">這個科目暫時未有記錄，快點寫下第一條筆記吧！</div>`;
+        return;
+      }
+
+      filteredLogs.forEach(item => {
+        const logEl = document.createElement('div');
+        logEl.className = 'log-item';
+        logEl.innerHTML = `
+          <div class="log-header">
+            <span class="log-subject">${item.subject}</span>
+            <span>${item.date} <button class="delete-btn" onclick="deleteLog(${item.id})">❌ 刪除</button></span>
+          </div>
+          <div>${item.content}</div>
+        `;
+        container.appendChild(logEl);
+      });
+    }
+
+    // 刪除筆記
+    function deleteLog(id) {
+      knowledgeBase = knowledgeBase.filter(item => item.id !== id);
+      localStorage.setItem('chillStudentNotes', JSON.stringify(knowledgeBase));
+      renderLogs();
+    }
+
+    // 篩選科目
+    function filterSubject(subject) {
+      currentFilter = subject;
+      
+      // 更新按鈕樣式
+      const buttons = document.querySelectorAll('.tag-btn');
+      buttons.forEach(btn => {
+        if (btn.innerText.includes(subject) || (subject === 'All' && btn.innerText.includes('全部'))) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      renderLogs();
+    }
+
+    // 隨機抽查一條知識 (Active Recall)
+    function drawRandomConcept() {
+      const flashcard = document.getElementById('flashcard-content');
+      if (knowledgeBase.length === 0) {
+        flashcard.innerText = '知識庫目前是空的，快去新增你的第一個筆記！';
+        return;
+      }
+
+      const randomIndex = Math.floor(Math.random() * knowledgeBase.length);
+      const item = knowledgeBase[randomIndex];
+
+      flashcard.innerHTML = `
+        <span style="background: var(--accent-color); color: #0f172a; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 0.9rem;">
+          ${item.subject}
+        </span>
+        <div style="margin-top: 10px; font-size: 1.1rem;">"${item.content}"</div>
+      `;
+    }
+
+    // 初始化頁面
+    renderLogs();
+  </script>
+</body>
+</html>
