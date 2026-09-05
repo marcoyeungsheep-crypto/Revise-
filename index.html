@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chill Student Life Planner & Knowledge Log</title>
+  <title>DSE Ultimate Study Hub & Pomodoro Planner</title>
   <style>
     :root {
       --bg-color: #0f172a;
@@ -11,12 +11,14 @@
       --text-color: #f8fafc;
       --accent-color: #38bdf8;
       --accent-hover: #0284c7;
+      --tomato-color: #ef4444;
       --subtext: #94a3b8;
       --border-color: #334155;
+      --success: #22c55e;
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-color);
       margin: 0;
@@ -27,14 +29,10 @@
 
     .container {
       width: 100%;
-      max-width: 800px;
+      max-width: 850px;
       display: flex;
       flex-direction: column;
       gap: 20px;
-    }
-
-    h1, h2, h3 {
-      margin: 0 0 10px 0;
     }
 
     .card {
@@ -42,55 +40,33 @@
       border-radius: 12px;
       padding: 20px;
       border: 1px solid var(--border-color);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
-    /* 科學筆記庫專用樣式 */
-    .subject-tags {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
+    h1, h2, h3 { margin: 0 0 10px 0; }
+
+    /* Tomato Timer */
+    .timer-card {
+      text-align: center;
+      border: 2px solid var(--tomato-color);
+      background: linear-gradient(180deg, #1e293b, #2b171a);
     }
 
-    .tag-btn {
-      background-color: #334155;
-      color: var(--text-color);
-      border: none;
-      padding: 6px 12px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      transition: all 0.2s;
-    }
-
-    .tag-btn.active, .tag-btn:hover {
-      background-color: var(--accent-color);
-      color: #0f172a;
+    .timer-display {
+      font-size: 4rem;
       font-weight: bold;
+      color: var(--tomato-color);
+      font-family: monospace;
+      margin: 10px 0;
     }
 
-    .input-group {
+    .btn-group {
       display: flex;
-      flex-direction: column;
       gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
-    select, textarea, input {
-      background-color: #0f172a;
-      color: var(--text-color);
-      border: 1px solid var(--border-color);
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 70px;
-    }
-
-    button.primary-btn {
+    button {
       background-color: var(--accent-color);
       color: #0f172a;
       border: none;
@@ -98,66 +74,97 @@
       border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
-      transition: background-color 0.2s;
+      transition: all 0.2s;
     }
 
-    button.primary-btn:hover {
-      background-color: var(--accent-hover);
+    button.tomato-btn {
+      background-color: var(--tomato-color);
+      color: white;
+    }
+
+    button.secondary {
+      background-color: #334155;
+      color: var(--text-color);
+    }
+
+    /* Syllabus & Tips Accordion */
+    .subject-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+
+    .tab-btn {
+      background-color: #334155;
+      color: var(--text-color);
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background-color: var(--accent-color);
+      color: #0f172a;
+      font-weight: bold;
+    }
+
+    .syllabus-box {
+      background-color: #0f172a;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid var(--accent-color);
+      margin-bottom: 15px;
+    }
+
+    .tip-tag {
+      display: inline-block;
+      background-color: #854d0e;
+      color: #fef08a;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .trap-tag {
+      display: inline-block;
+      background-color: #991b1b;
+      color: #fecaca;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    /* Log & Inputs */
+    select, textarea {
+      width: 100%;
+      background-color: #0f172a;
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      padding: 10px;
+      border-radius: 8px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
     }
 
     .log-list {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-top: 15px;
-      max-height: 300px;
+      max-height: 250px;
       overflow-y: auto;
     }
 
     .log-item {
       background-color: #0f172a;
       border-left: 4px solid var(--accent-color);
-      padding: 12px;
+      padding: 10px;
       border-radius: 0 8px 8px 0;
-      position: relative;
-    }
-
-    .log-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.8rem;
-      color: var(--subtext);
-      margin-bottom: 6px;
-    }
-
-    .log-subject {
-      background-color: var(--accent-color);
-      color: #0f172a;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-weight: bold;
-    }
-
-    .delete-btn {
-      background: none;
-      border: none;
-      color: #ef4444;
-      cursor: pointer;
-      font-size: 0.8rem;
-    }
-
-    /* 閃卡複習區 */
-    .flashcard {
-      background: linear-gradient(135deg, #1e293b, #334155);
-      border: 1px solid var(--accent-color);
-      text-align: center;
-      padding: 25px;
-    }
-
-    .flashcard-text {
-      font-size: 1.1rem;
-      margin: 15px 0;
-      line-height: 1.5;
     }
   </style>
 </head>
@@ -165,183 +172,211 @@
 
   <div class="container">
     
-    <!-- 標題 -->
     <div style="text-align: center;">
-      <h1>🧠 Chill Student Life & 全科知識庫</h1>
-      <p style="color: var(--subtext);">溫書 + 健身 + 每日新知識累積</p>
+      <h1>🎓 DSE Ultimate Study Hub</h1>
+      <p style="color: var(--subtext);">Tomato Clock | Syllabus & Exam Tips | Knowledge Log</p>
     </div>
 
-    <!-- 每日隨機知識複習閃卡 (Active Recall) -->
-    <div class="card flashcard">
-      <div style="font-size: 0.85rem; color: var(--accent-color); font-weight: bold; letter-spacing: 1px;">
-        💡 每日靈光一閃 (ACTIVE RECALL)
+    <!-- 1. 番茄鐘 Revision Timer -->
+    <div class="card timer-card">
+      <h2>🍅 DSE 番茄溫習計時器 (Pomodoro Timer)</h2>
+      <div id="timer-status" style="color: var(--subtext); font-size: 0.9rem;">Focus Mode (25 Mins)</div>
+      <div id="timer" class="timer-display">25:00</div>
+      <div class="btn-group">
+        <button class="tomato-btn" onclick="startTimer()">▶️ Start / Pause</button>
+        <button class="secondary" onclick="setTimer(1500, 'Focus Mode (25 Mins)')">🍅 Work 25m</button>
+        <button class="secondary" onclick="setTimer(300, 'Short Break (5 Mins)')">☕ Break 5m</button>
+        <button class="secondary" onclick="resetTimer()">🔄 Reset</button>
       </div>
-      <div id="flashcard-content" class="flashcard-text">
-        按下方的「隨機抽查」，測試自己還記不記得學過的知識！
-      </div>
-      <button class="primary-btn" onclick="drawRandomConcept()">🎲 隨機抽查一條新知識</button>
     </div>
 
-    <!-- 新增知識 Log -->
+    <!-- 2. DSE F.4 - F.6 Syllabus & Tips Explorer -->
     <div class="card">
-      <h2>📝 記錄今日新學到的知識 / 陷阱</h2>
-      <div class="input-group">
-        <label for="subject-select" style="font-size: 0.9rem; color: var(--subtext);">選擇科目：</label>
-        <select id="subject-select">
-          <option value="Physics">⚡ Physical 物理</option>
-          <option value="Chemistry">🧪 Chemistry 化學</option>
-          <option value="數學">📐 數學 (Core)</option>
-          <option value="M2">積分 M2</option>
-          <option value="中文">📖 中文</option>
-          <option value="英文">🔤 英文</option>
-          <option value="Geography">🌍 Geography 地理</option>
-        </select>
-
-        <textarea id="concept-input" placeholder="例如：Physics - Heat loss 導致計算出的 c (比熱容量) 偏高，因為升溫 delta T 比預期小。"></textarea>
-        
-        <button class="primary-btn" onclick="saveKnowledge()">💾 記錄入記憶庫</button>
-      </div>
-    </div>
-
-    <!-- 知識庫清單與篩選 -->
-    <div class="card">
-      <h2>📚 我的全科知識庫</h2>
+      <h2>📖 DSE F.4–F.6 科目大綱與高分 Tips</h2>
+      <p style="color: var(--subtext); font-size: 0.85rem;">點擊科目查看核心 Topics、考試 Scoring Tips 與 Common Traps：</p>
       
-      <!-- 科目篩選按鈕 -->
-      <div class="subject-tags">
-        <button class="tag-btn active" onclick="filterSubject('All')">全部 (All)</button>
-        <button class="tag-btn" onclick="filterSubject('Physics')">Physics</button>
-        <button class="tag-btn" onclick="filterSubject('Chemistry')">Chemistry</button>
-        <button class="tag-btn" onclick="filterSubject('數學')">數學</button>
-        <button class="tag-btn" onclick="filterSubject('M2')">M2</button>
-        <button class="tag-btn" onclick="filterSubject('中文')">中文</button>
-        <button class="tag-btn" onclick="filterSubject('英文')">英文</button>
-        <button class="tag-btn" onclick="filterSubject('Geography')">Geography</button>
+      <div class="subject-tabs">
+        <button class="tab-btn active" onclick="showSyllabus('Physics')">⚡ Physics</button>
+        <button class="tab-btn" onclick="showSyllabus('Chemistry')">🧪 Chemistry</button>
+        <button class="tab-btn" onclick="showSyllabus('Math')">📐 Core Math</button>
+        <button class="tab-btn" onclick="showSyllabus('M2')">📈 M2</button>
+        <button class="tab-btn" onclick="showSyllabus('中文')">📖 中文</button>
+        <button class="tab-btn" onclick="showSyllabus('English')">🔤 English</button>
+        <button class="tab-btn" onclick="showSyllabus('Geography')">🌍 Geography</button>
       </div>
 
-      <div id="log-container" class="log-list">
-        <!-- 筆記會動態塞在這裡 -->
+      <div id="syllabus-content">
+        <!-- Dynamic Syllabus Content Loaded Here -->
       </div>
+    </div>
+
+    <!-- 3. Active Recall Flashcards -->
+    <div class="card" style="text-align: center; border-color: var(--accent-color);">
+      <h3 style="color: var(--accent-color);">💡 ACTIVE RECALL FLASHCARD</h3>
+      <div id="flashcard-content" style="margin: 15px 0; font-size: 1.05rem; min-height: 40px;">
+        點擊下方按鈕，隨機抽查各科精華概念！
+      </div>
+      <button onclick="drawRandomConcept()">🎲 隨機抽查新知識</button>
+    </div>
+
+    <!-- 4. 全科知識庫與筆記 -->
+    <div class="card">
+      <h2>📝 個人全科筆記 / 錯題庫</h2>
+      <select id="subject-select">
+        <option value="Physics">⚡ Physics</option>
+        <option value="Chemistry">🧪 Chemistry</option>
+        <option value="Math">📐 Core Math</option>
+        <option value="M2">📈 M2</option>
+        <option value="中文">📖 中文</option>
+        <option value="English">🔤 English</option>
+        <option value="Geography">🌍 Geography</option>
+      </select>
+      <textarea id="concept-input" placeholder="記低今日學到的知識或做錯的題目..."></textarea>
+      <button onclick="saveKnowledge()" style="width: 100%;">💾 存入個人知識庫</button>
+
+      <h3 style="margin-top: 20px;">📚 已儲存筆記</h3>
+      <div id="log-container" class="log-list"></div>
     </div>
 
   </div>
 
   <script>
-    // 初始化筆記資料庫（如果有舊紀錄就載入，沒有就用預設的熱學筆記）
-    let knowledgeBase = JSON.parse(localStorage.getItem('chillStudentNotes')) || [
-      {
-        id: 1,
-        subject: 'Physics',
-        content: 'Heat loss 導致算出來的 c (比熱容量) 偏高：因為部分熱熱散失，實際升溫 ΔT 偏小，由 c = Q / (m*ΔT) 可知分母變小，c 被高估。',
-        date: '2026-09-05'
-      },
-      {
-        id: 2,
-        subject: 'Physics',
-        content: 'T-t 圖形斜率 (Slope = P/mc)：斜率越陡代表升溫越快，比熱容量 c 越細。水平線 (Slope=0) 代表正在相變 (Phase Change)。',
-        date: '2026-09-05'
+    // 1. Pomodoro Timer Logic
+    let timeLeft = 1500;
+    let timerId = null;
+
+    function updateTimerDisplay() {
+      const min = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+      const sec = (timeLeft % 60).toString().padStart(2, '0');
+      document.getElementById('timer').innerText = `${min}:${sec}`;
+    }
+
+    function setTimer(seconds, statusText) {
+      clearInterval(timerId);
+      timerId = null;
+      timeLeft = seconds;
+      document.getElementById('timer-status').innerText = statusText;
+      updateTimerDisplay();
+    }
+
+    function startTimer() {
+      if (timerId) {
+        clearInterval(timerId);
+        timerId = null;
+      } else {
+        timerId = setInterval(() => {
+          if (timeLeft > 0) {
+            timeLeft--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(timerId);
+            timerId = null;
+            alert("🍅 番茄鐘時間到！休息一下或者開始下一個番茄鐘吧！");
+          }
+        }, 1000);
       }
+    }
+
+    function resetTimer() {
+      setTimer(1500, 'Focus Mode (25 Mins)');
+    }
+
+    // 2. Syllabus Database with Tips & Traps
+    const dseSyllabus = {
+      Physics: [
+        { topic: "Heat & Gases (熱學與氣體)", tip: "計算特定比熱容量 c 時，題目提及 Heat Loss 會導致計算出的 c 偏高（Overestimated），因為升溫 ΔT 變小。", trap: "關掉 Heater 後水溫不會立刻下降，會因 Residual Heat 繼續上升至 Thermal Equilibrium。" },
+        { topic: "Force & Motion (力與運動)", tip: "繪畫 Free-body diagram 時，記住 Normal Force 永遠垂直於接觸面，Friction 永遠反向運動趨勢。", trap: "勻速圓周運動（Uniform Circular Motion）的加速度不為零！a = v^2/r 指向圓心。" },
+        { topic: "Waves & Optics (波浪與光學)", tip: "Double-slit experiment 中，Δy = (λD)/a，光源顏色改變（λ 變大）會令條紋間距變寬。", trap: "全內反射（Total Internal Reflection）必須由高折射率（Dense）傳向低折射率（Rare）介質。" }
+      ],
+      Chemistry: [
+        { topic: "Microscopic World (微觀世界)", tip: "辨別 Ionic / Covalent bond：金屬+非金屬多為 Ionic，純非金屬多為 Simple Molecular 或 Giant Covalent (如 Diamond, SiO2)。", trap: "Ice 浮於水面是因為 Hydrogen Bonding 形成 Cage-like Structure，體積變大密度變小。" },
+        { topic: "Chemical Reactions & Energy (化學反應與能量)", tip: "Hess's Law 計算 ΔH：ΔH = Σ ΔHf(Products) - Σ ΔHf(Reactants)。", trap: "Exothermic reaction (ΔH < 0) 的 Activation Energy 不一定比 Endothermic 小。" }
+      ],
+      Math: [
+        { topic: "Quadratic & Polynomials (二次方程與多項式)", tip: "Remainder Theorem：當 P(x) 除以 (ax-b)，餘數就是 P(b/a)。", trap: "Discriminant Δ = b^2 - 4ac > 0 只代表「有兩個不相等的實根」，若題目寫「Real roots」則 Δ >= 0！" },
+        { topic: "Trigonometry & 3D Problems (三角學與 3D 空間)", tip: "搵 Line and Plane 之間的 Angle：必須先搵出垂線（Projection）落平面的交點。", trap: "Sine Rule 有 Ambiguous Case（SSA 情況下可能存在兩個三角形解）。" }
+      ],
+      M2: [
+        { topic: "Calculus & Limits (微積分與極限)", tip: "Chain Rule / Product Rule 必須極熟練。∫ e^(ax) dx = (1/a)e^(ax) + C。", trap: "做 Indefinite Integration 永遠不要忘記加 + C！" },
+        { topic: "Matrices & Vectors (矩陣與向量)", tip: "Matrix Multiplication 不滿足交換律：AB ≠ BA。求 A^-1 前先確定 det(A) ≠ 0。", trap: "Vector Dot Product 為 0 代表兩向量垂直（Perpendicular）；Cross Product 為 0 代表平行（Parallel）。" }
+      ],
+      中文: [
+        { topic: "指定文言經典 (12 篇範文)", tip: "熟背關鍵字詞解釋與直譯。《論仁論君子》、《岳陽樓記》高頻考核對比與論證手法。", trap: "譯句時切忌漏譯代詞（如「之」、「其」）或虛詞。" },
+        { topic: "閱讀理解與實用文", tip: "長題目答題結構：主張 → 文本依據 → 分析說明。實用文注重格式與行文語氣。", trap: "評析題若只抄錄原文而沒有解釋「如何體現主題」，分數會大幅被扣。" }
+      ],
+      English: [
+        { topic: "Paper 1 Reading & Paper 2 Writing", tip: "Paper 1 Proofreading 注意 Verb Tenses & Subject-Verb Agreement；Paper 2 Writing 多用 Connectives (e.g., Furthermore, Consequently).", trap: "Writing 答題時切忌偏離 Prompt 給予的 Target Audience 同 Tone (Formal / Informal)。" }
+      ],
+      Geography: [
+        { topic: "Plate Tectonics & Dynamic Earth (板塊與地貌)", tip: "Destructive Boundary 常出現 Volcanic Arc, Trench, Fold Mountains。繪圖題標註關鍵特徵（Magma, Subduction zone）。", trap: "地震震級（Magnitude）代表能量釋放量，震度（Intensity）才是各地受破壞程度（隨距離改變）。" }
+      ]
+    };
+
+    function showSyllabus(subject) {
+      document.querySelectorAll('.subject-tabs .tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.innerText.includes(subject));
+      });
+
+      const container = document.getElementById('syllabus-content');
+      container.innerHTML = '';
+
+      const topics = dseSyllabus[subject] || [];
+      topics.forEach(t => {
+        const box = document.createElement('div');
+        box.className = 'syllabus-box';
+        box.innerHTML = `
+          <h3 style="color: var(--accent-color); margin-bottom: 8px;">${t.topic}</h3>
+          <div><span class="tip-tag">💡 Scoring Tip</span> ${t.tip}</div>
+          <div style="margin-top: 6px;"><span class="trap-tag">⚠️ Common Trap</span> ${t.trap}</div>
+          <button style="margin-top: 10px; font-size: 0.8rem; padding: 4px 8px;" onclick="addTipToNotes('${subject}', '${t.tip}')">➕ 一鍵加入我的 Flashcard</button>
+        `;
+        container.appendChild(box);
+      });
+    }
+
+    function addTipToNotes(subject, tipText) {
+      knowledgeBase.unshift({ id: Date.now(), subject: subject, content: tipText });
+      localStorage.setItem('chillStudentNotes', JSON.stringify(knowledgeBase));
+      renderLogs();
+      alert(`已將 [${subject}] 的 Tips 存入你的個人知識庫！💪`);
+    }
+
+    // 3. Knowledge Base & Flashcards Logic
+    let knowledgeBase = JSON.parse(localStorage.getItem('chillStudentNotes')) || [
+      { id: 1, subject: 'Physics', content: 'Heat loss 導致算出來的 c 偏高：因為升溫 ΔT 偏小，由 c = Q / (m*ΔT) 可知 c 被高估。' },
+      { id: 2, subject: 'Math', content: 'Real roots 代表 Δ >= 0 (包含相等與不相等實根)！' }
     ];
 
-    let currentFilter = 'All';
-
-    // 儲存新知識
     function saveKnowledge() {
       const subject = document.getElementById('subject-select').value;
       const content = document.getElementById('concept-input').value.trim();
+      if (!content) return alert('請輸入內容！');
 
-      if (!content) {
-        alert('請輸入你學到的新知識內容！');
-        return;
-      }
-
-      const newLog = {
-        id: Date.now(),
-        subject: subject,
-        content: content,
-        date: new Date().toISOString().split('T')[0]
-      };
-
-      knowledgeBase.unshift(newLog); // 加到最前面
+      knowledgeBase.unshift({ id: Date.now(), subject, content });
       localStorage.setItem('chillStudentNotes', JSON.stringify(knowledgeBase));
-      
       document.getElementById('concept-input').value = '';
       renderLogs();
-      alert('已成功存入全科知識庫！💪');
     }
 
-    // 渲染筆記列表
     function renderLogs() {
       const container = document.getElementById('log-container');
       container.innerHTML = '';
-
-      const filteredLogs = currentFilter === 'All' 
-        ? knowledgeBase 
-        : knowledgeBase.filter(item => item.subject === currentFilter);
-
-      if (filteredLogs.length === 0) {
-        container.innerHTML = `<div style="text-align:center; color: var(--subtext); padding: 20px;">這個科目暫時未有記錄，快點寫下第一條筆記吧！</div>`;
-        return;
-      }
-
-      filteredLogs.forEach(item => {
-        const logEl = document.createElement('div');
-        logEl.className = 'log-item';
-        logEl.innerHTML = `
-          <div class="log-header">
-            <span class="log-subject">${item.subject}</span>
-            <span>${item.date} <button class="delete-btn" onclick="deleteLog(${item.id})">❌ 刪除</button></span>
-          </div>
-          <div>${item.content}</div>
-        `;
-        container.appendChild(logEl);
+      knowledgeBase.forEach(item => {
+        const el = document.createElement('div');
+        el.className = 'log-item';
+        el.innerHTML = `<strong>[${item.subject}]</strong> ${item.content}`;
+        container.appendChild(el);
       });
     }
 
-    // 刪除筆記
-    function deleteLog(id) {
-      knowledgeBase = knowledgeBase.filter(item => item.id !== id);
-      localStorage.setItem('chillStudentNotes', JSON.stringify(knowledgeBase));
-      renderLogs();
-    }
-
-    // 篩選科目
-    function filterSubject(subject) {
-      currentFilter = subject;
-      
-      // 更新按鈕樣式
-      const buttons = document.querySelectorAll('.tag-btn');
-      buttons.forEach(btn => {
-        if (btn.innerText.includes(subject) || (subject === 'All' && btn.innerText.includes('全部'))) {
-          btn.classList.add('active');
-        } else {
-          btn.classList.remove('active');
-        }
-      });
-
-      renderLogs();
-    }
-
-    // 隨機抽查一條知識 (Active Recall)
     function drawRandomConcept() {
-      const flashcard = document.getElementById('flashcard-content');
-      if (knowledgeBase.length === 0) {
-        flashcard.innerText = '知識庫目前是空的，快去新增你的第一個筆記！';
-        return;
-      }
-
-      const randomIndex = Math.floor(Math.random() * knowledgeBase.length);
-      const item = knowledgeBase[randomIndex];
-
-      flashcard.innerHTML = `
-        <span style="background: var(--accent-color); color: #0f172a; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 0.9rem;">
-          ${item.subject}
-        </span>
-        <div style="margin-top: 10px; font-size: 1.1rem;">"${item.content}"</div>
-      `;
+      if (knowledgeBase.length === 0) return;
+      const item = knowledgeBase[Math.floor(Math.random() * knowledgeBase.length)];
+      document.getElementById('flashcard-content').innerHTML = `<strong>[${item.subject}]</strong> ${item.content}`;
     }
 
-    // 初始化頁面
+    // Initialize Page
+    showSyllabus('Physics');
     renderLogs();
   </script>
 </body>
