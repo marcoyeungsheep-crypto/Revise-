@@ -43,7 +43,6 @@
 
     h1, h2, h3 { margin: 0 0 10px 0; }
 
-    /* Timers Section */
     .timer-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -68,7 +67,6 @@
       margin: 8px 0;
     }
 
-    /* Buttons & Controls */
     .btn-group { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
     button {
       background-color: var(--accent-color);
@@ -83,7 +81,6 @@
     button.tomato-btn { background-color: var(--tomato-color); color: white; }
     button.secondary { background-color: #334155; color: var(--text-color); }
 
-    /* Gym Checklist */
     ul { list-style: none; padding: 0; margin: 0; }
     li {
       background-color: #0f172a;
@@ -96,7 +93,6 @@
       border: 1px solid var(--border-color);
     }
 
-    /* Subject Tabs & Content */
     .subject-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
     .syllabus-card {
       background-color: #0f172a;
@@ -129,11 +125,10 @@
       <p style="color: var(--subtext);">DSE Syllabus Knowledge Base | Dual Timers | Gym Workout List</p>
     </div>
 
-    <!-- 1. Timers (Revision Tomato + Gym Rest) -->
+    <!-- Timers (Revision Tomato + Gym Rest) -->
     <div class="card">
       <h2>⏱️ 雙計時器 (Dual Timers)</h2>
       <div class="timer-grid">
-        <!-- Tomato Study Timer -->
         <div class="timer-box" style="border: 1px solid var(--tomato-color);">
           <h3 style="color: var(--tomato-color);">🍅 溫習番茄鐘</h3>
           <div id="study-timer" class="timer-display" style="color: var(--tomato-color);">25:00</div>
@@ -144,7 +139,6 @@
           </div>
         </div>
 
-        <!-- Gym Rest Timer -->
         <div class="timer-box" style="border: 1px solid var(--gym-color);">
           <h3 style="color: var(--gym-color);">🏋️ Gym Rest Timer</h3>
           <div id="gym-timer" class="timer-display" style="color: var(--gym-color);">01:30</div>
@@ -157,7 +151,7 @@
       </div>
     </div>
 
-    <!-- 2. Daily Gym Workout & Routine List -->
+    <!-- Daily Gym Workout Routine -->
     <div class="card" style="border-color: var(--gym-color);">
       <h2 style="color: var(--gym-color);">🏋️ Daily Gym Routine & Tracker</h2>
       <ul id="gym-list">
@@ -169,7 +163,7 @@
       </ul>
     </div>
 
-    <!-- 3. DSE Full Syllabus Knowledge Base -->
+    <!-- DSE Syllabus Knowledge Base -->
     <div class="card">
       <h2>📚 DSE 全科溫習筆記 & 考綱知識庫</h2>
       <div class="subject-tabs">
@@ -184,7 +178,7 @@
       <div id="syllabus-content"></div>
     </div>
 
-    <!-- 4. Active Recall Notes Log -->
+    <!-- Active Recall Notes Log -->
     <div class="card">
       <h2>📝 個人 Active Recall 錯題庫</h2>
       <select id="log-subject">
@@ -206,7 +200,6 @@
   </div>
 
   <script>
-    // Timers System
     let timers = {
       study: { time: 1500, id: null, display: 'study-timer' },
       gym: { time: 90, id: null, display: 'gym-timer' }
@@ -243,7 +236,6 @@
       }
     }
 
-    // Comprehensive DSE Syllabus Notes
     const dseSyllabus = {
       Physics: [
         { topic: "Heat & Gases (熱學與氣體)", tip: "c = Q/(m*ΔT)。若有 Heat Loss，升溫 ΔT 偏小，計算出的 c 會偏高 (Overestimated)。", trap: "Residual heat 會令關掉 Heater 後水溫繼續微微上升。" },
@@ -288,319 +280,6 @@
       });
     }
 
-    // Active Recall Storage
-    let logs = JSON.parse(localStorage.getItem('dseUserLogs')) || [];
-    function saveLog() {
-      const sub = document.getElementById('log-subject').value;
-      const text = document.getElementById('log-input').value.trim();
-      if (!text) return;
-      logs.unshift({ sub, text });
-      localStorage.setItem('dseUserLogs', JSON.stringify(logs));
-      document.getElementById('log-input').value = '';
-      renderLogs();
-    }
-
-    function renderLogs() {
-      const container = document.getElementById('log-list');
-      container.innerHTML = logs.map(l => `<div class="syllabus-card"><b>[${l.sub}]</b> ${l.text}</div>`).join('');
-    }
-
-    showSyllabus('Physics');
-    renderLogs();
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="zh-HK">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DSE Ultimate Hub & Gym Planner</title>
-  <style>
-    :root {
-      --bg-color: #0f172a;
-      --card-bg: #1e293b;
-      --text-color: #f8fafc;
-      --accent-color: #38bdf8;
-      --tomato-color: #ef4444;
-      --gym-color: #10b981;
-      --subtext: #94a3b8;
-      --border-color: #334155;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 900px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .card {
-      background-color: var(--card-bg);
-      border-radius: 12px;
-      padding: 20px;
-      border: 1px solid var(--border-color);
-    }
-
-    h1, h2, h3 { margin: 0 0 10px 0; }
-
-    /* Timers Section */
-    .timer-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-    }
-
-    @media (max-width: 650px) {
-      .timer-grid { grid-template-columns: 1fr; }
-    }
-
-    .timer-box {
-      text-align: center;
-      padding: 15px;
-      border-radius: 10px;
-      background-color: #0f172a;
-    }
-
-    .timer-display {
-      font-size: 3rem;
-      font-weight: bold;
-      font-family: monospace;
-      margin: 8px 0;
-    }
-
-    /* Buttons & Controls */
-    .btn-group { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
-    button {
-      background-color: var(--accent-color);
-      color: #0f172a;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button.gym-btn { background-color: var(--gym-color); color: white; }
-    button.tomato-btn { background-color: var(--tomato-color); color: white; }
-    button.secondary { background-color: #334155; color: var(--text-color); }
-
-    /* Gym Checklist */
-    ul { list-style: none; padding: 0; margin: 0; }
-    li {
-      background-color: #0f172a;
-      padding: 10px;
-      border-radius: 8px;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border: 1px solid var(--border-color);
-    }
-
-    /* Subject Tabs & Content */
-    .subject-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
-    .syllabus-card {
-      background-color: #0f172a;
-      padding: 14px;
-      border-radius: 8px;
-      border-left: 4px solid var(--accent-color);
-      margin-bottom: 12px;
-    }
-    .tag-tip { background-color: #854d0e; color: #fef08a; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
-    .tag-trap { background-color: #991b1b; color: #fecaca; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
-
-    textarea, select {
-      width: 100%;
-      background-color: #0f172a;
-      color: var(--text-color);
-      border: 1px solid var(--border-color);
-      padding: 10px;
-      border-radius: 8px;
-      box-sizing: border-box;
-      margin-bottom: 10px;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="container">
-    
-    <div style="text-align: center;">
-      <h1>🎓 DSE All-in-One Study & Gym Hub</h1>
-      <p style="color: var(--subtext);">DSE Syllabus Knowledge Base | Dual Timers | Gym Workout List</p>
-    </div>
-
-    <!-- 1. Timers (Revision Tomato + Gym Rest) -->
-    <div class="card">
-      <h2>⏱️ 雙計時器 (Dual Timers)</h2>
-      <div class="timer-grid">
-        <!-- Tomato Study Timer -->
-        <div class="timer-box" style="border: 1px solid var(--tomato-color);">
-          <h3 style="color: var(--tomato-color);">🍅 溫習番茄鐘</h3>
-          <div id="study-timer" class="timer-display" style="color: var(--tomato-color);">25:00</div>
-          <div class="btn-group">
-            <button class="tomato-btn" onclick="toggleTimer('study')">▶️ Start/Pause</button>
-            <button class="secondary" onclick="setTimer('study', 1500)">25m</button>
-            <button class="secondary" onclick="setTimer('study', 300)">5m</button>
-          </div>
-        </div>
-
-        <!-- Gym Rest Timer -->
-        <div class="timer-box" style="border: 1px solid var(--gym-color);">
-          <h3 style="color: var(--gym-color);">🏋️ Gym Rest Timer</h3>
-          <div id="gym-timer" class="timer-display" style="color: var(--gym-color);">01:30</div>
-          <div class="btn-group">
-            <button class="gym-btn" onclick="toggleTimer('gym')">▶️ Start Rest</button>
-            <button class="secondary" onclick="setTimer('gym', 90)">90s</button>
-            <button class="secondary" onclick="setTimer('gym', 60)">60s</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 2. Daily Gym Workout & Routine List -->
-    <div class="card" style="border-color: var(--gym-color);">
-      <h2 style="color: var(--gym-color);">🏋️ Daily Gym Routine & Tracker</h2>
-      <ul id="gym-list">
-        <li><label><input type="checkbox"> <b>Hanging / Floor Leg Raises</b> (Core / Abs)</label> <span>3-4 Sets x 15 Reps</span></li>
-        <li><label><input type="checkbox"> <b>Russian Twists</b> (Obliques)</label> <span>3-4 Sets x 20 Reps</span></li>
-        <li><label><input type="checkbox"> <b>Plank 平板支撐</b> (Core Line)</label> <span>3 Sets x 60 Secs</span></li>
-        <li><label><input type="checkbox"> <b>Mountain Climbers</b> (Fat Burn)</label> <span>3 Sets x 30 Reps</span></li>
-        <li><label><input type="checkbox"> <b>Push-ups / Dumbbell Press</b> (Upper Body)</label> <span>3 Sets x 12 Reps</span></li>
-      </ul>
-    </div>
-
-    <!-- 3. DSE Full Syllabus Knowledge Base -->
-    <div class="card">
-      <h2>📚 DSE 全科溫習筆記 & 考綱知識庫</h2>
-      <div class="subject-tabs">
-        <button onclick="showSyllabus('Physics')">⚡ Physics</button>
-        <button onclick="showSyllabus('Chemistry')">🧪 Chem</button>
-        <button onclick="showSyllabus('Math')">📐 Core Math</button>
-        <button onclick="showSyllabus('M2')">📈 M2</button>
-        <button onclick="showSyllabus('中文')">📖 中文</button>
-        <button onclick="showSyllabus('English')">🔤 English</button>
-        <button onclick="showSyllabus('Geography')">🌍 Geography</button>
-      </div>
-      <div id="syllabus-content"></div>
-    </div>
-
-    <!-- 4. Active Recall Notes Log -->
-    <div class="card">
-      <h2>📝 個人 Active Recall 錯題庫</h2>
-      <select id="log-subject">
-        <option value="Physics">Physics</option>
-        <option value="Chemistry">Chemistry</option>
-        <option value="Math">Math</option>
-        <option value="M2">M2</option>
-        <option value="中文">中文</option>
-        <option value="English">English</option>
-        <option value="Geography">Geography</option>
-      </select>
-      <textarea id="log-input" placeholder="寫低你做錯的 Past Paper 題目或者需要記住的公式..."></textarea>
-      <button onclick="saveLog()" style="width: 100%;">💾 存入個人錯題庫</button>
-
-      <h3 style="margin-top: 15px;">📚 已儲存筆記</h3>
-      <div id="log-list"></div>
-    </div>
-
-  </div>
-
-  <script>
-    // Timers System
-    let timers = {
-      study: { time: 1500, id: null, display: 'study-timer' },
-      gym: { time: 90, id: null, display: 'gym-timer' }
-    };
-
-    function updateDisplay(type) {
-      const min = Math.floor(timers[type].time / 60).toString().padStart(2, '0');
-      const sec = (timers[type].time % 60).toString().padStart(2, '0');
-      document.getElementById(timers[type].display).innerText = `${min}:${sec}`;
-    }
-
-    function setTimer(type, seconds) {
-      clearInterval(timers[type].id);
-      timers[type].id = null;
-      timers[type].time = seconds;
-      updateDisplay(type);
-    }
-
-    function toggleTimer(type) {
-      if (timers[type].id) {
-        clearInterval(timers[type].id);
-        timers[type].id = null;
-      } else {
-        timers[type].id = setInterval(() => {
-          if (timers[type].time > 0) {
-            timers[type].time--;
-            updateDisplay(type);
-          } else {
-            clearInterval(timers[type].id);
-            timers[type].id = null;
-            alert(type === 'study' ? "🍅 番茄鐘完成！休息一下！" : "🏋️ 健身組間休息完畢！開始下一組！");
-          }
-        }, 1000);
-      }
-    }
-
-    // Comprehensive DSE Syllabus Notes
-    const dseSyllabus = {
-      Physics: [
-        { topic: "Heat & Gases (熱學與氣體)", tip: "c = Q/(m*ΔT)。若有 Heat Loss，升溫 ΔT 偏小，計算出的 c 會偏高 (Overestimated)。", trap: "Residual heat 會令關掉 Heater 後水溫繼續微微上升。" },
-        { topic: "Force & Motion (力學)", tip: "圓周運動 v^2/r 的向心力由 Friction 或 Tension 提供，加速度永遠指向圓心。", trap: "粗糙斜面上滑動時，摩擦力 F_f 永遠反向運動方向。" },
-        { topic: "Waves & Optics (波動與光學)", tip: "Double Slit Δy = λD/a。λ 越大 (如紅光)，條紋間距越寬。", trap: "發生 Total Internal Reflection 必須從 Dense 傳入 Rare 介質。" }
-      ],
-      Chemistry: [
-        { topic: "Microscopic World (微觀世界)", tip: "Simple Molecular 低熔點，Giant Covalent (Diamond, SiO2) 極高熔點。", trap: "冰浮於水面係因為 Hydrogen Bonding 形成 Cage-like 空心結構。" },
-        { topic: "Chemical Energy & Reaction", tip: "ΔH = Σ ΔHf(Products) - Σ ΔHf(Reactants)。", trap: "吸熱反應 (Endothermic) 的 Activation Energy 不一定比放熱反應大。" }
-      ],
-      Math: [
-        { topic: "Polynomials & Quadratics", tip: "Remainder Theorem: P(x) 除以 (ax-b)，餘數為 P(b/a)。", trap: "Real roots 代表 Δ ≥ 0！只有寫「two distinct real roots」先係 Δ > 0。" },
-        { topic: "3D Trigonometry", tip: "搵 Line-Plane Angle 先搵投影點 (Projection Point)。", trap: "Sine Rule 在 SSA 情況下有 Ambiguous Case (兩個可能角度)。" }
-      ],
-      M2: [
-        { topic: "Calculus Integrations", tip: "∫ e^(ax) dx = (1/a)e^(ax) + C。", trap: "做 Indefinite Integral 永遠唔好漏寫 + C！" },
-        { topic: "Vectors & Matrices", tip: "Dot Product = 0 代表垂直，Cross Product = 0 代表平行。", trap: "Matrix 乘法 AB ≠ BA，無交換律。" }
-      ],
-      中文: [
-        { topic: "指定文言 12 篇範文", tip: "熟背關鍵字詞解釋與直譯。《岳陽樓記》、《論仁論君子》常考對比手法。", trap: "譯句時切忌漏譯代詞（如「之」、「其」）同虛詞。" },
-        { topic: "閱讀理解與實用文", tip: "答題結構：主張 → 文本依據 → 說明。", trap: "評析題若只抄原文而冇解釋「如何體現主題」會被扣分。" }
-      ],
-      English: [
-        { topic: "Paper 1 & Paper 2", tip: "Proofreading 注意 Subject-Verb Agreement 與 Tenses；Writing 多用 Connective Words。", trap: "Writing 切忌偏離 Target Audience 與 Tone 要求。" }
-      ],
-      Geography: [
-        { topic: "Plate Tectonics (板塊地貌)", tip: "Destructive Boundary 常見 Trench, Volcanic Arc, Fold Mountains。", trap: "震級 Magnitude 代表能量，震度 Intensity 代表各地破壞力。" }
-      ]
-    };
-
-    function showSyllabus(subject) {
-      const container = document.getElementById('syllabus-content');
-      container.innerHTML = '';
-      (dseSyllabus[subject] || []).forEach(t => {
-        container.innerHTML += `
-          <div class="syllabus-card">
-            <h3 style="color: var(--accent-color);">${t.topic}</h3>
-            <div><span class="tag-tip">💡 Tip</span> ${t.tip}</div>
-            <div style="margin-top: 5px;"><span class="tag-trap">⚠️ Trap</span> ${t.trap}</div>
-          </div>
-        `;
-      });
-    }
-
-    // Active Recall Storage
     let logs = JSON.parse(localStorage.getItem('dseUserLogs')) || [];
     function saveLog() {
       const sub = document.getElementById('log-subject').value;
