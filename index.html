@@ -3,18 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DSE Ultimate Study Hub & Pomodoro Planner</title>
+  <title>DSE Ultimate Hub & Gym Planner</title>
   <style>
     :root {
       --bg-color: #0f172a;
       --card-bg: #1e293b;
       --text-color: #f8fafc;
       --accent-color: #38bdf8;
-      --accent-hover: #0284c7;
       --tomato-color: #ef4444;
+      --gym-color: #10b981;
       --subtext: #94a3b8;
       --border-color: #334155;
-      --success: #22c55e;
     }
 
     body {
@@ -29,7 +28,7 @@
 
     .container {
       width: 100%;
-      max-width: 850px;
+      max-width: 900px;
       display: flex;
       flex-direction: column;
       gap: 20px;
@@ -44,104 +43,72 @@
 
     h1, h2, h3 { margin: 0 0 10px 0; }
 
-    /* Tomato Timer */
-    .timer-card {
+    /* Timers Section */
+    .timer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    @media (max-width: 650px) {
+      .timer-grid { grid-template-columns: 1fr; }
+    }
+
+    .timer-box {
       text-align: center;
-      border: 2px solid var(--tomato-color);
-      background: linear-gradient(180deg, #1e293b, #2b171a);
+      padding: 15px;
+      border-radius: 10px;
+      background-color: #0f172a;
     }
 
     .timer-display {
-      font-size: 4rem;
+      font-size: 3rem;
       font-weight: bold;
-      color: var(--tomato-color);
       font-family: monospace;
-      margin: 10px 0;
+      margin: 8px 0;
     }
 
-    .btn-group {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
+    /* Buttons & Controls */
+    .btn-group { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
     button {
       background-color: var(--accent-color);
       color: #0f172a;
       border: none;
-      padding: 10px 16px;
-      border-radius: 8px;
+      padding: 8px 12px;
+      border-radius: 6px;
       font-weight: bold;
       cursor: pointer;
-      transition: all 0.2s;
     }
+    button.gym-btn { background-color: var(--gym-color); color: white; }
+    button.tomato-btn { background-color: var(--tomato-color); color: white; }
+    button.secondary { background-color: #334155; color: var(--text-color); }
 
-    button.tomato-btn {
-      background-color: var(--tomato-color);
-      color: white;
-    }
-
-    button.secondary {
-      background-color: #334155;
-      color: var(--text-color);
-    }
-
-    /* Syllabus & Tips Accordion */
-    .subject-tabs {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 15px;
-    }
-
-    .tab-btn {
-      background-color: #334155;
-      color: var(--text-color);
-      border: none;
-      padding: 8px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .tab-btn.active {
-      background-color: var(--accent-color);
-      color: #0f172a;
-      font-weight: bold;
-    }
-
-    .syllabus-box {
+    /* Gym Checklist */
+    ul { list-style: none; padding: 0; margin: 0; }
+    li {
       background-color: #0f172a;
-      padding: 15px;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid var(--border-color);
+    }
+
+    /* Subject Tabs & Content */
+    .subject-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
+    .syllabus-card {
+      background-color: #0f172a;
+      padding: 14px;
       border-radius: 8px;
       border-left: 4px solid var(--accent-color);
-      margin-bottom: 15px;
+      margin-bottom: 12px;
     }
+    .tag-tip { background-color: #854d0e; color: #fef08a; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+    .tag-trap { background-color: #991b1b; color: #fecaca; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
 
-    .tip-tag {
-      display: inline-block;
-      background-color: #854d0e;
-      color: #fef08a;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .trap-tag {
-      display: inline-block;
-      background-color: #991b1b;
-      color: #fecaca;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    /* Log & Inputs */
-    select, textarea {
+    textarea, select {
       width: 100%;
       background-color: #0f172a;
       color: var(--text-color);
@@ -151,20 +118,317 @@
       box-sizing: border-box;
       margin-bottom: 10px;
     }
+  </style>
+</head>
+<body>
 
-    .log-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      max-height: 250px;
-      overflow-y: auto;
+  <div class="container">
+    
+    <div style="text-align: center;">
+      <h1>🎓 DSE All-in-One Study & Gym Hub</h1>
+      <p style="color: var(--subtext);">DSE Syllabus Knowledge Base | Dual Timers | Gym Workout List</p>
+    </div>
+
+    <!-- 1. Timers (Revision Tomato + Gym Rest) -->
+    <div class="card">
+      <h2>⏱️ 雙計時器 (Dual Timers)</h2>
+      <div class="timer-grid">
+        <!-- Tomato Study Timer -->
+        <div class="timer-box" style="border: 1px solid var(--tomato-color);">
+          <h3 style="color: var(--tomato-color);">🍅 溫習番茄鐘</h3>
+          <div id="study-timer" class="timer-display" style="color: var(--tomato-color);">25:00</div>
+          <div class="btn-group">
+            <button class="tomato-btn" onclick="toggleTimer('study')">▶️ Start/Pause</button>
+            <button class="secondary" onclick="setTimer('study', 1500)">25m</button>
+            <button class="secondary" onclick="setTimer('study', 300)">5m</button>
+          </div>
+        </div>
+
+        <!-- Gym Rest Timer -->
+        <div class="timer-box" style="border: 1px solid var(--gym-color);">
+          <h3 style="color: var(--gym-color);">🏋️ Gym Rest Timer</h3>
+          <div id="gym-timer" class="timer-display" style="color: var(--gym-color);">01:30</div>
+          <div class="btn-group">
+            <button class="gym-btn" onclick="toggleTimer('gym')">▶️ Start Rest</button>
+            <button class="secondary" onclick="setTimer('gym', 90)">90s</button>
+            <button class="secondary" onclick="setTimer('gym', 60)">60s</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Daily Gym Workout & Routine List -->
+    <div class="card" style="border-color: var(--gym-color);">
+      <h2 style="color: var(--gym-color);">🏋️ Daily Gym Routine & Tracker</h2>
+      <ul id="gym-list">
+        <li><label><input type="checkbox"> <b>Hanging / Floor Leg Raises</b> (Core / Abs)</label> <span>3-4 Sets x 15 Reps</span></li>
+        <li><label><input type="checkbox"> <b>Russian Twists</b> (Obliques)</label> <span>3-4 Sets x 20 Reps</span></li>
+        <li><label><input type="checkbox"> <b>Plank 平板支撐</b> (Core Line)</label> <span>3 Sets x 60 Secs</span></li>
+        <li><label><input type="checkbox"> <b>Mountain Climbers</b> (Fat Burn)</label> <span>3 Sets x 30 Reps</span></li>
+        <li><label><input type="checkbox"> <b>Push-ups / Dumbbell Press</b> (Upper Body)</label> <span>3 Sets x 12 Reps</span></li>
+      </ul>
+    </div>
+
+    <!-- 3. DSE Full Syllabus Knowledge Base -->
+    <div class="card">
+      <h2>📚 DSE 全科溫習筆記 & 考綱知識庫</h2>
+      <div class="subject-tabs">
+        <button onclick="showSyllabus('Physics')">⚡ Physics</button>
+        <button onclick="showSyllabus('Chemistry')">🧪 Chem</button>
+        <button onclick="showSyllabus('Math')">📐 Core Math</button>
+        <button onclick="showSyllabus('M2')">📈 M2</button>
+        <button onclick="showSyllabus('中文')">📖 中文</button>
+        <button onclick="showSyllabus('English')">🔤 English</button>
+        <button onclick="showSyllabus('Geography')">🌍 Geography</button>
+      </div>
+      <div id="syllabus-content"></div>
+    </div>
+
+    <!-- 4. Active Recall Notes Log -->
+    <div class="card">
+      <h2>📝 個人 Active Recall 錯題庫</h2>
+      <select id="log-subject">
+        <option value="Physics">Physics</option>
+        <option value="Chemistry">Chemistry</option>
+        <option value="Math">Math</option>
+        <option value="M2">M2</option>
+        <option value="中文">中文</option>
+        <option value="English">English</option>
+        <option value="Geography">Geography</option>
+      </select>
+      <textarea id="log-input" placeholder="寫低你做錯的 Past Paper 題目或者需要記住的公式..."></textarea>
+      <button onclick="saveLog()" style="width: 100%;">💾 存入個人錯題庫</button>
+
+      <h3 style="margin-top: 15px;">📚 已儲存筆記</h3>
+      <div id="log-list"></div>
+    </div>
+
+  </div>
+
+  <script>
+    // Timers System
+    let timers = {
+      study: { time: 1500, id: null, display: 'study-timer' },
+      gym: { time: 90, id: null, display: 'gym-timer' }
+    };
+
+    function updateDisplay(type) {
+      const min = Math.floor(timers[type].time / 60).toString().padStart(2, '0');
+      const sec = (timers[type].time % 60).toString().padStart(2, '0');
+      document.getElementById(timers[type].display).innerText = `${min}:${sec}`;
     }
 
-    .log-item {
+    function setTimer(type, seconds) {
+      clearInterval(timers[type].id);
+      timers[type].id = null;
+      timers[type].time = seconds;
+      updateDisplay(type);
+    }
+
+    function toggleTimer(type) {
+      if (timers[type].id) {
+        clearInterval(timers[type].id);
+        timers[type].id = null;
+      } else {
+        timers[type].id = setInterval(() => {
+          if (timers[type].time > 0) {
+            timers[type].time--;
+            updateDisplay(type);
+          } else {
+            clearInterval(timers[type].id);
+            timers[type].id = null;
+            alert(type === 'study' ? "🍅 番茄鐘完成！休息一下！" : "🏋️ 健身組間休息完畢！開始下一組！");
+          }
+        }, 1000);
+      }
+    }
+
+    // Comprehensive DSE Syllabus Notes
+    const dseSyllabus = {
+      Physics: [
+        { topic: "Heat & Gases (熱學與氣體)", tip: "c = Q/(m*ΔT)。若有 Heat Loss，升溫 ΔT 偏小，計算出的 c 會偏高 (Overestimated)。", trap: "Residual heat 會令關掉 Heater 後水溫繼續微微上升。" },
+        { topic: "Force & Motion (力學)", tip: "圓周運動 v^2/r 的向心力由 Friction 或 Tension 提供，加速度永遠指向圓心。", trap: "粗糙斜面上滑動時，摩擦力 F_f 永遠反向運動方向。" },
+        { topic: "Waves & Optics (波動與光學)", tip: "Double Slit Δy = λD/a。λ 越大 (如紅光)，條紋間距越寬。", trap: "發生 Total Internal Reflection 必須從 Dense 傳入 Rare 介質。" }
+      ],
+      Chemistry: [
+        { topic: "Microscopic World (微觀世界)", tip: "Simple Molecular 低熔點，Giant Covalent (Diamond, SiO2) 極高熔點。", trap: "冰浮於水面係因為 Hydrogen Bonding 形成 Cage-like 空心結構。" },
+        { topic: "Chemical Energy & Reaction", tip: "ΔH = Σ ΔHf(Products) - Σ ΔHf(Reactants)。", trap: "吸熱反應 (Endothermic) 的 Activation Energy 不一定比放熱反應大。" }
+      ],
+      Math: [
+        { topic: "Polynomials & Quadratics", tip: "Remainder Theorem: P(x) 除以 (ax-b)，餘數為 P(b/a)。", trap: "Real roots 代表 Δ ≥ 0！只有寫「two distinct real roots」先係 Δ > 0。" },
+        { topic: "3D Trigonometry", tip: "搵 Line-Plane Angle 先搵投影點 (Projection Point)。", trap: "Sine Rule 在 SSA 情況下有 Ambiguous Case (兩個可能角度)。" }
+      ],
+      M2: [
+        { topic: "Calculus Integrations", tip: "∫ e^(ax) dx = (1/a)e^(ax) + C。", trap: "做 Indefinite Integral 永遠唔好漏寫 + C！" },
+        { topic: "Vectors & Matrices", tip: "Dot Product = 0 代表垂直，Cross Product = 0 代表平行。", trap: "Matrix 乘法 AB ≠ BA，無交換律。" }
+      ],
+      中文: [
+        { topic: "指定文言 12 篇範文", tip: "熟背關鍵字詞解釋與直譯。《岳陽樓記》、《論仁論君子》常考對比手法。", trap: "譯句時切忌漏譯代詞（如「之」、「其」）同虛詞。" },
+        { topic: "閱讀理解與實用文", tip: "答題結構：主張 → 文本依據 → 說明。", trap: "評析題若只抄原文而冇解釋「如何體現主題」會被扣分。" }
+      ],
+      English: [
+        { topic: "Paper 1 & Paper 2", tip: "Proofreading 注意 Subject-Verb Agreement 與 Tenses；Writing 多用 Connective Words。", trap: "Writing 切忌偏離 Target Audience 與 Tone 要求。" }
+      ],
+      Geography: [
+        { topic: "Plate Tectonics (板塊地貌)", tip: "Destructive Boundary 常見 Trench, Volcanic Arc, Fold Mountains。", trap: "震級 Magnitude 代表能量，震度 Intensity 代表各地破壞力。" }
+      ]
+    };
+
+    function showSyllabus(subject) {
+      const container = document.getElementById('syllabus-content');
+      container.innerHTML = '';
+      (dseSyllabus[subject] || []).forEach(t => {
+        container.innerHTML += `
+          <div class="syllabus-card">
+            <h3 style="color: var(--accent-color);">${t.topic}</h3>
+            <div><span class="tag-tip">💡 Tip</span> ${t.tip}</div>
+            <div style="margin-top: 5px;"><span class="tag-trap">⚠️ Trap</span> ${t.trap}</div>
+          </div>
+        `;
+      });
+    }
+
+    // Active Recall Storage
+    let logs = JSON.parse(localStorage.getItem('dseUserLogs')) || [];
+    function saveLog() {
+      const sub = document.getElementById('log-subject').value;
+      const text = document.getElementById('log-input').value.trim();
+      if (!text) return;
+      logs.unshift({ sub, text });
+      localStorage.setItem('dseUserLogs', JSON.stringify(logs));
+      document.getElementById('log-input').value = '';
+      renderLogs();
+    }
+
+    function renderLogs() {
+      const container = document.getElementById('log-list');
+      container.innerHTML = logs.map(l => `<div class="syllabus-card"><b>[${l.sub}]</b> ${l.text}</div>`).join('');
+    }
+
+    showSyllabus('Physics');
+    renderLogs();
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSE Ultimate Hub & Gym Planner</title>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --text-color: #f8fafc;
+      --accent-color: #38bdf8;
+      --tomato-color: #ef4444;
+      --gym-color: #10b981;
+      --subtext: #94a3b8;
+      --border-color: #334155;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid var(--border-color);
+    }
+
+    h1, h2, h3 { margin: 0 0 10px 0; }
+
+    /* Timers Section */
+    .timer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    @media (max-width: 650px) {
+      .timer-grid { grid-template-columns: 1fr; }
+    }
+
+    .timer-box {
+      text-align: center;
+      padding: 15px;
+      border-radius: 10px;
       background-color: #0f172a;
-      border-left: 4px solid var(--accent-color);
+    }
+
+    .timer-display {
+      font-size: 3rem;
+      font-weight: bold;
+      font-family: monospace;
+      margin: 8px 0;
+    }
+
+    /* Buttons & Controls */
+    .btn-group { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+    button {
+      background-color: var(--accent-color);
+      color: #0f172a;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button.gym-btn { background-color: var(--gym-color); color: white; }
+    button.tomato-btn { background-color: var(--tomato-color); color: white; }
+    button.secondary { background-color: #334155; color: var(--text-color); }
+
+    /* Gym Checklist */
+    ul { list-style: none; padding: 0; margin: 0; }
+    li {
+      background-color: #0f172a;
       padding: 10px;
-      border-radius: 0 8px 8px 0;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid var(--border-color);
+    }
+
+    /* Subject Tabs & Content */
+    .subject-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
+    .syllabus-card {
+      background-color: #0f172a;
+      padding: 14px;
+      border-radius: 8px;
+      border-left: 4px solid var(--accent-color);
+      margin-bottom: 12px;
+    }
+    .tag-tip { background-color: #854d0e; color: #fef08a; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+    .tag-trap { background-color: #991b1b; color: #fecaca; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+
+    textarea, select {
+      width: 100%;
+      background-color: #0f172a;
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      padding: 10px;
+      border-radius: 8px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -173,209 +437,186 @@
   <div class="container">
     
     <div style="text-align: center;">
-      <h1>🎓 DSE Ultimate Study Hub</h1>
-      <p style="color: var(--subtext);">Tomato Clock | Syllabus & Exam Tips | Knowledge Log</p>
+      <h1>🎓 DSE All-in-One Study & Gym Hub</h1>
+      <p style="color: var(--subtext);">DSE Syllabus Knowledge Base | Dual Timers | Gym Workout List</p>
     </div>
 
-    <!-- 1. 番茄鐘 Revision Timer -->
-    <div class="card timer-card">
-      <h2>🍅 DSE 番茄溫習計時器 (Pomodoro Timer)</h2>
-      <div id="timer-status" style="color: var(--subtext); font-size: 0.9rem;">Focus Mode (25 Mins)</div>
-      <div id="timer" class="timer-display">25:00</div>
-      <div class="btn-group">
-        <button class="tomato-btn" onclick="startTimer()">▶️ Start / Pause</button>
-        <button class="secondary" onclick="setTimer(1500, 'Focus Mode (25 Mins)')">🍅 Work 25m</button>
-        <button class="secondary" onclick="setTimer(300, 'Short Break (5 Mins)')">☕ Break 5m</button>
-        <button class="secondary" onclick="resetTimer()">🔄 Reset</button>
+    <!-- 1. Timers (Revision Tomato + Gym Rest) -->
+    <div class="card">
+      <h2>⏱️ 雙計時器 (Dual Timers)</h2>
+      <div class="timer-grid">
+        <!-- Tomato Study Timer -->
+        <div class="timer-box" style="border: 1px solid var(--tomato-color);">
+          <h3 style="color: var(--tomato-color);">🍅 溫習番茄鐘</h3>
+          <div id="study-timer" class="timer-display" style="color: var(--tomato-color);">25:00</div>
+          <div class="btn-group">
+            <button class="tomato-btn" onclick="toggleTimer('study')">▶️ Start/Pause</button>
+            <button class="secondary" onclick="setTimer('study', 1500)">25m</button>
+            <button class="secondary" onclick="setTimer('study', 300)">5m</button>
+          </div>
+        </div>
+
+        <!-- Gym Rest Timer -->
+        <div class="timer-box" style="border: 1px solid var(--gym-color);">
+          <h3 style="color: var(--gym-color);">🏋️ Gym Rest Timer</h3>
+          <div id="gym-timer" class="timer-display" style="color: var(--gym-color);">01:30</div>
+          <div class="btn-group">
+            <button class="gym-btn" onclick="toggleTimer('gym')">▶️ Start Rest</button>
+            <button class="secondary" onclick="setTimer('gym', 90)">90s</button>
+            <button class="secondary" onclick="setTimer('gym', 60)">60s</button>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- 2. DSE F.4 - F.6 Syllabus & Tips Explorer -->
+    <!-- 2. Daily Gym Workout & Routine List -->
+    <div class="card" style="border-color: var(--gym-color);">
+      <h2 style="color: var(--gym-color);">🏋️ Daily Gym Routine & Tracker</h2>
+      <ul id="gym-list">
+        <li><label><input type="checkbox"> <b>Hanging / Floor Leg Raises</b> (Core / Abs)</label> <span>3-4 Sets x 15 Reps</span></li>
+        <li><label><input type="checkbox"> <b>Russian Twists</b> (Obliques)</label> <span>3-4 Sets x 20 Reps</span></li>
+        <li><label><input type="checkbox"> <b>Plank 平板支撐</b> (Core Line)</label> <span>3 Sets x 60 Secs</span></li>
+        <li><label><input type="checkbox"> <b>Mountain Climbers</b> (Fat Burn)</label> <span>3 Sets x 30 Reps</span></li>
+        <li><label><input type="checkbox"> <b>Push-ups / Dumbbell Press</b> (Upper Body)</label> <span>3 Sets x 12 Reps</span></li>
+      </ul>
+    </div>
+
+    <!-- 3. DSE Full Syllabus Knowledge Base -->
     <div class="card">
-      <h2>📖 DSE F.4–F.6 科目大綱與高分 Tips</h2>
-      <p style="color: var(--subtext); font-size: 0.85rem;">點擊科目查看核心 Topics、考試 Scoring Tips 與 Common Traps：</p>
-      
+      <h2>📚 DSE 全科溫習筆記 & 考綱知識庫</h2>
       <div class="subject-tabs">
-        <button class="tab-btn active" onclick="showSyllabus('Physics')">⚡ Physics</button>
-        <button class="tab-btn" onclick="showSyllabus('Chemistry')">🧪 Chemistry</button>
-        <button class="tab-btn" onclick="showSyllabus('Math')">📐 Core Math</button>
-        <button class="tab-btn" onclick="showSyllabus('M2')">📈 M2</button>
-        <button class="tab-btn" onclick="showSyllabus('中文')">📖 中文</button>
-        <button class="tab-btn" onclick="showSyllabus('English')">🔤 English</button>
-        <button class="tab-btn" onclick="showSyllabus('Geography')">🌍 Geography</button>
+        <button onclick="showSyllabus('Physics')">⚡ Physics</button>
+        <button onclick="showSyllabus('Chemistry')">🧪 Chem</button>
+        <button onclick="showSyllabus('Math')">📐 Core Math</button>
+        <button onclick="showSyllabus('M2')">📈 M2</button>
+        <button onclick="showSyllabus('中文')">📖 中文</button>
+        <button onclick="showSyllabus('English')">🔤 English</button>
+        <button onclick="showSyllabus('Geography')">🌍 Geography</button>
       </div>
-
-      <div id="syllabus-content">
-        <!-- Dynamic Syllabus Content Loaded Here -->
-      </div>
+      <div id="syllabus-content"></div>
     </div>
 
-    <!-- 3. Active Recall Flashcards -->
-    <div class="card" style="text-align: center; border-color: var(--accent-color);">
-      <h3 style="color: var(--accent-color);">💡 ACTIVE RECALL FLASHCARD</h3>
-      <div id="flashcard-content" style="margin: 15px 0; font-size: 1.05rem; min-height: 40px;">
-        點擊下方按鈕，隨機抽查各科精華概念！
-      </div>
-      <button onclick="drawRandomConcept()">🎲 隨機抽查新知識</button>
-    </div>
-
-    <!-- 4. 全科知識庫與筆記 -->
+    <!-- 4. Active Recall Notes Log -->
     <div class="card">
-      <h2>📝 個人全科筆記 / 錯題庫</h2>
-      <select id="subject-select">
-        <option value="Physics">⚡ Physics</option>
-        <option value="Chemistry">🧪 Chemistry</option>
-        <option value="Math">📐 Core Math</option>
-        <option value="M2">📈 M2</option>
-        <option value="中文">📖 中文</option>
-        <option value="English">🔤 English</option>
-        <option value="Geography">🌍 Geography</option>
+      <h2>📝 個人 Active Recall 錯題庫</h2>
+      <select id="log-subject">
+        <option value="Physics">Physics</option>
+        <option value="Chemistry">Chemistry</option>
+        <option value="Math">Math</option>
+        <option value="M2">M2</option>
+        <option value="中文">中文</option>
+        <option value="English">English</option>
+        <option value="Geography">Geography</option>
       </select>
-      <textarea id="concept-input" placeholder="記低今日學到的知識或做錯的題目..."></textarea>
-      <button onclick="saveKnowledge()" style="width: 100%;">💾 存入個人知識庫</button>
+      <textarea id="log-input" placeholder="寫低你做錯的 Past Paper 題目或者需要記住的公式..."></textarea>
+      <button onclick="saveLog()" style="width: 100%;">💾 存入個人錯題庫</button>
 
-      <h3 style="margin-top: 20px;">📚 已儲存筆記</h3>
-      <div id="log-container" class="log-list"></div>
+      <h3 style="margin-top: 15px;">📚 已儲存筆記</h3>
+      <div id="log-list"></div>
     </div>
 
   </div>
 
   <script>
-    // 1. Pomodoro Timer Logic
-    let timeLeft = 1500;
-    let timerId = null;
+    // Timers System
+    let timers = {
+      study: { time: 1500, id: null, display: 'study-timer' },
+      gym: { time: 90, id: null, display: 'gym-timer' }
+    };
 
-    function updateTimerDisplay() {
-      const min = Math.floor(timeLeft / 60).toString().padStart(2, '0');
-      const sec = (timeLeft % 60).toString().padStart(2, '0');
-      document.getElementById('timer').innerText = `${min}:${sec}`;
+    function updateDisplay(type) {
+      const min = Math.floor(timers[type].time / 60).toString().padStart(2, '0');
+      const sec = (timers[type].time % 60).toString().padStart(2, '0');
+      document.getElementById(timers[type].display).innerText = `${min}:${sec}`;
     }
 
-    function setTimer(seconds, statusText) {
-      clearInterval(timerId);
-      timerId = null;
-      timeLeft = seconds;
-      document.getElementById('timer-status').innerText = statusText;
-      updateTimerDisplay();
+    function setTimer(type, seconds) {
+      clearInterval(timers[type].id);
+      timers[type].id = null;
+      timers[type].time = seconds;
+      updateDisplay(type);
     }
 
-    function startTimer() {
-      if (timerId) {
-        clearInterval(timerId);
-        timerId = null;
+    function toggleTimer(type) {
+      if (timers[type].id) {
+        clearInterval(timers[type].id);
+        timers[type].id = null;
       } else {
-        timerId = setInterval(() => {
-          if (timeLeft > 0) {
-            timeLeft--;
-            updateTimerDisplay();
+        timers[type].id = setInterval(() => {
+          if (timers[type].time > 0) {
+            timers[type].time--;
+            updateDisplay(type);
           } else {
-            clearInterval(timerId);
-            timerId = null;
-            alert("🍅 番茄鐘時間到！休息一下或者開始下一個番茄鐘吧！");
+            clearInterval(timers[type].id);
+            timers[type].id = null;
+            alert(type === 'study' ? "🍅 番茄鐘完成！休息一下！" : "🏋️ 健身組間休息完畢！開始下一組！");
           }
         }, 1000);
       }
     }
 
-    function resetTimer() {
-      setTimer(1500, 'Focus Mode (25 Mins)');
-    }
-
-    // 2. Syllabus Database with Tips & Traps
+    // Comprehensive DSE Syllabus Notes
     const dseSyllabus = {
       Physics: [
-        { topic: "Heat & Gases (熱學與氣體)", tip: "計算特定比熱容量 c 時，題目提及 Heat Loss 會導致計算出的 c 偏高（Overestimated），因為升溫 ΔT 變小。", trap: "關掉 Heater 後水溫不會立刻下降，會因 Residual Heat 繼續上升至 Thermal Equilibrium。" },
-        { topic: "Force & Motion (力與運動)", tip: "繪畫 Free-body diagram 時，記住 Normal Force 永遠垂直於接觸面，Friction 永遠反向運動趨勢。", trap: "勻速圓周運動（Uniform Circular Motion）的加速度不為零！a = v^2/r 指向圓心。" },
-        { topic: "Waves & Optics (波浪與光學)", tip: "Double-slit experiment 中，Δy = (λD)/a，光源顏色改變（λ 變大）會令條紋間距變寬。", trap: "全內反射（Total Internal Reflection）必須由高折射率（Dense）傳向低折射率（Rare）介質。" }
+        { topic: "Heat & Gases (熱學與氣體)", tip: "c = Q/(m*ΔT)。若有 Heat Loss，升溫 ΔT 偏小，計算出的 c 會偏高 (Overestimated)。", trap: "Residual heat 會令關掉 Heater 後水溫繼續微微上升。" },
+        { topic: "Force & Motion (力學)", tip: "圓周運動 v^2/r 的向心力由 Friction 或 Tension 提供，加速度永遠指向圓心。", trap: "粗糙斜面上滑動時，摩擦力 F_f 永遠反向運動方向。" },
+        { topic: "Waves & Optics (波動與光學)", tip: "Double Slit Δy = λD/a。λ 越大 (如紅光)，條紋間距越寬。", trap: "發生 Total Internal Reflection 必須從 Dense 傳入 Rare 介質。" }
       ],
       Chemistry: [
-        { topic: "Microscopic World (微觀世界)", tip: "辨別 Ionic / Covalent bond：金屬+非金屬多為 Ionic，純非金屬多為 Simple Molecular 或 Giant Covalent (如 Diamond, SiO2)。", trap: "Ice 浮於水面是因為 Hydrogen Bonding 形成 Cage-like Structure，體積變大密度變小。" },
-        { topic: "Chemical Reactions & Energy (化學反應與能量)", tip: "Hess's Law 計算 ΔH：ΔH = Σ ΔHf(Products) - Σ ΔHf(Reactants)。", trap: "Exothermic reaction (ΔH < 0) 的 Activation Energy 不一定比 Endothermic 小。" }
+        { topic: "Microscopic World (微觀世界)", tip: "Simple Molecular 低熔點，Giant Covalent (Diamond, SiO2) 極高熔點。", trap: "冰浮於水面係因為 Hydrogen Bonding 形成 Cage-like 空心結構。" },
+        { topic: "Chemical Energy & Reaction", tip: "ΔH = Σ ΔHf(Products) - Σ ΔHf(Reactants)。", trap: "吸熱反應 (Endothermic) 的 Activation Energy 不一定比放熱反應大。" }
       ],
       Math: [
-        { topic: "Quadratic & Polynomials (二次方程與多項式)", tip: "Remainder Theorem：當 P(x) 除以 (ax-b)，餘數就是 P(b/a)。", trap: "Discriminant Δ = b^2 - 4ac > 0 只代表「有兩個不相等的實根」，若題目寫「Real roots」則 Δ >= 0！" },
-        { topic: "Trigonometry & 3D Problems (三角學與 3D 空間)", tip: "搵 Line and Plane 之間的 Angle：必須先搵出垂線（Projection）落平面的交點。", trap: "Sine Rule 有 Ambiguous Case（SSA 情況下可能存在兩個三角形解）。" }
+        { topic: "Polynomials & Quadratics", tip: "Remainder Theorem: P(x) 除以 (ax-b)，餘數為 P(b/a)。", trap: "Real roots 代表 Δ ≥ 0！只有寫「two distinct real roots」先係 Δ > 0。" },
+        { topic: "3D Trigonometry", tip: "搵 Line-Plane Angle 先搵投影點 (Projection Point)。", trap: "Sine Rule 在 SSA 情況下有 Ambiguous Case (兩個可能角度)。" }
       ],
       M2: [
-        { topic: "Calculus & Limits (微積分與極限)", tip: "Chain Rule / Product Rule 必須極熟練。∫ e^(ax) dx = (1/a)e^(ax) + C。", trap: "做 Indefinite Integration 永遠不要忘記加 + C！" },
-        { topic: "Matrices & Vectors (矩陣與向量)", tip: "Matrix Multiplication 不滿足交換律：AB ≠ BA。求 A^-1 前先確定 det(A) ≠ 0。", trap: "Vector Dot Product 為 0 代表兩向量垂直（Perpendicular）；Cross Product 為 0 代表平行（Parallel）。" }
+        { topic: "Calculus Integrations", tip: "∫ e^(ax) dx = (1/a)e^(ax) + C。", trap: "做 Indefinite Integral 永遠唔好漏寫 + C！" },
+        { topic: "Vectors & Matrices", tip: "Dot Product = 0 代表垂直，Cross Product = 0 代表平行。", trap: "Matrix 乘法 AB ≠ BA，無交換律。" }
       ],
       中文: [
-        { topic: "指定文言經典 (12 篇範文)", tip: "熟背關鍵字詞解釋與直譯。《論仁論君子》、《岳陽樓記》高頻考核對比與論證手法。", trap: "譯句時切忌漏譯代詞（如「之」、「其」）或虛詞。" },
-        { topic: "閱讀理解與實用文", tip: "長題目答題結構：主張 → 文本依據 → 分析說明。實用文注重格式與行文語氣。", trap: "評析題若只抄錄原文而沒有解釋「如何體現主題」，分數會大幅被扣。" }
+        { topic: "指定文言 12 篇範文", tip: "熟背關鍵字詞解釋與直譯。《岳陽樓記》、《論仁論君子》常考對比手法。", trap: "譯句時切忌漏譯代詞（如「之」、「其」）同虛詞。" },
+        { topic: "閱讀理解與實用文", tip: "答題結構：主張 → 文本依據 → 說明。", trap: "評析題若只抄原文而冇解釋「如何體現主題」會被扣分。" }
       ],
       English: [
-        { topic: "Paper 1 Reading & Paper 2 Writing", tip: "Paper 1 Proofreading 注意 Verb Tenses & Subject-Verb Agreement；Paper 2 Writing 多用 Connectives (e.g., Furthermore, Consequently).", trap: "Writing 答題時切忌偏離 Prompt 給予的 Target Audience 同 Tone (Formal / Informal)。" }
+        { topic: "Paper 1 & Paper 2", tip: "Proofreading 注意 Subject-Verb Agreement 與 Tenses；Writing 多用 Connective Words。", trap: "Writing 切忌偏離 Target Audience 與 Tone 要求。" }
       ],
       Geography: [
-        { topic: "Plate Tectonics & Dynamic Earth (板塊與地貌)", tip: "Destructive Boundary 常出現 Volcanic Arc, Trench, Fold Mountains。繪圖題標註關鍵特徵（Magma, Subduction zone）。", trap: "地震震級（Magnitude）代表能量釋放量，震度（Intensity）才是各地受破壞程度（隨距離改變）。" }
+        { topic: "Plate Tectonics (板塊地貌)", tip: "Destructive Boundary 常見 Trench, Volcanic Arc, Fold Mountains。", trap: "震級 Magnitude 代表能量，震度 Intensity 代表各地破壞力。" }
       ]
     };
 
     function showSyllabus(subject) {
-      document.querySelectorAll('.subject-tabs .tab-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.innerText.includes(subject));
-      });
-
       const container = document.getElementById('syllabus-content');
       container.innerHTML = '';
-
-      const topics = dseSyllabus[subject] || [];
-      topics.forEach(t => {
-        const box = document.createElement('div');
-        box.className = 'syllabus-box';
-        box.innerHTML = `
-          <h3 style="color: var(--accent-color); margin-bottom: 8px;">${t.topic}</h3>
-          <div><span class="tip-tag">💡 Scoring Tip</span> ${t.tip}</div>
-          <div style="margin-top: 6px;"><span class="trap-tag">⚠️ Common Trap</span> ${t.trap}</div>
-          <button style="margin-top: 10px; font-size: 0.8rem; padding: 4px 8px;" onclick="addTipToNotes('${subject}', '${t.tip}')">➕ 一鍵加入我的 Flashcard</button>
+      (dseSyllabus[subject] || []).forEach(t => {
+        container.innerHTML += `
+          <div class="syllabus-card">
+            <h3 style="color: var(--accent-color);">${t.topic}</h3>
+            <div><span class="tag-tip">💡 Tip</span> ${t.tip}</div>
+            <div style="margin-top: 5px;"><span class="tag-trap">⚠️ Trap</span> ${t.trap}</div>
+          </div>
         `;
-        container.appendChild(box);
       });
     }
 
-    function addTipToNotes(subject, tipText) {
-      knowledgeBase.unshift({ id: Date.now(), subject: subject, content: tipText });
-      localStorage.setItem('chillStudentNotes', JSON.stringify(knowledgeBase));
-      renderLogs();
-      alert(`已將 [${subject}] 的 Tips 存入你的個人知識庫！💪`);
-    }
-
-    // 3. Knowledge Base & Flashcards Logic
-    let knowledgeBase = JSON.parse(localStorage.getItem('chillStudentNotes')) || [
-      { id: 1, subject: 'Physics', content: 'Heat loss 導致算出來的 c 偏高：因為升溫 ΔT 偏小，由 c = Q / (m*ΔT) 可知 c 被高估。' },
-      { id: 2, subject: 'Math', content: 'Real roots 代表 Δ >= 0 (包含相等與不相等實根)！' }
-    ];
-
-    function saveKnowledge() {
-      const subject = document.getElementById('subject-select').value;
-      const content = document.getElementById('concept-input').value.trim();
-      if (!content) return alert('請輸入內容！');
-
-      knowledgeBase.unshift({ id: Date.now(), subject, content });
-      localStorage.setItem('chillStudentNotes', JSON.stringify(knowledgeBase));
-      document.getElementById('concept-input').value = '';
+    // Active Recall Storage
+    let logs = JSON.parse(localStorage.getItem('dseUserLogs')) || [];
+    function saveLog() {
+      const sub = document.getElementById('log-subject').value;
+      const text = document.getElementById('log-input').value.trim();
+      if (!text) return;
+      logs.unshift({ sub, text });
+      localStorage.setItem('dseUserLogs', JSON.stringify(logs));
+      document.getElementById('log-input').value = '';
       renderLogs();
     }
 
     function renderLogs() {
-      const container = document.getElementById('log-container');
-      container.innerHTML = '';
-      knowledgeBase.forEach(item => {
-        const el = document.createElement('div');
-        el.className = 'log-item';
-        el.innerHTML = `<strong>[${item.subject}]</strong> ${item.content}`;
-        container.appendChild(el);
-      });
+      const container = document.getElementById('log-list');
+      container.innerHTML = logs.map(l => `<div class="syllabus-card"><b>[${l.sub}]</b> ${l.text}</div>`).join('');
     }
 
-    function drawRandomConcept() {
-      if (knowledgeBase.length === 0) return;
-      const item = knowledgeBase[Math.floor(Math.random() * knowledgeBase.length)];
-      document.getElementById('flashcard-content').innerHTML = `<strong>[${item.subject}]</strong> ${item.content}`;
-    }
-
-    // Initialize Page
     showSyllabus('Physics');
     renderLogs();
   </script>
